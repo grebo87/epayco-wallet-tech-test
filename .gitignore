@@ -1,0 +1,27 @@
+# Archivos de entorno
+.env
+.env.*
+!.env.example
+
+# Directorios de dependencias
+node_modules/
+vendor/
+
+# Archivos de configuración local
+*.local
+
+# Directorios de compilación
+dist/
+build/
+
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Editor
+.vscode/
+.idea/
+.DS_Store

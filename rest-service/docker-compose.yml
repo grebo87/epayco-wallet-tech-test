@@ -1,0 +1,27 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: lumen_app
+    volumes:
+      - ./:/var/www
+    networks:
+      - lumen
+    environment:
+      - APP_ENV=local
+
+  nginx:
+    image: nginx:latest
+    container_name: lumen_nginx
+    ports:
+      - "8000:80"
+    volumes:
+      - ./:/var/www
+      - ./docker/nginx.conf:/etc/nginx/conf.d/default.conf
+    networks:
+      - lumen
+
+networks:
+  lumen:
+    driver: bridge

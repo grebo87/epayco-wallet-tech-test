@@ -1,0 +1,121 @@
+{
+    "info": {
+        "name": "Epayco Wallet API",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+        "_postman_id": "a1b2c3d4-e5f6-7890"
+    },
+    "item": [
+        {
+            "name": "Register Client",
+            "request": {
+                "method": "POST",
+                "header": [
+                    {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                    }
+                ],
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\n    \"document\": \"1234567890\",\n    \"name\": \"John Doe\",\n    \"email\": \"john@example.com\",\n    \"phone\": \"+1234567890\"\n}"
+                },
+                "url": {
+                    "raw": "{{base_url}}/api/registerClient",
+                    "host": ["{{base_url}}"],
+                    "path": ["api", "registerClient"]
+                }
+            }
+        },
+        {
+            "name": "Check Balance",
+            "request": {
+                "method": "POST",
+                "header": [
+                    {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                    }
+                ],
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\n    \"document\": \"1234567890\",\n    \"phone\": \"+1234567890\"\n}"
+                },
+                "url": {
+                    "raw": "{{base_url}}/api/checkBalance",
+                    "host": ["{{base_url}}"],
+                    "path": ["api", "checkBalance"]
+                }
+            }
+        },
+        {
+            "name": "Recharge Wallet",
+            "request": {
+                "method": "POST",
+                "header": [
+                    {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                    }
+                ],
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\n    \"document\": \"1234567890\",\n    \"phone\": \"+1234567890\",\n    \"amount\": 100.50\n}"
+                },
+                "url": {
+                    "raw": "{{base_url}}/api/rechargeWallet",
+                    "host": ["{{base_url}}"],
+                    "path": ["api", "rechargeWallet"]
+                }
+            }
+        },
+        {
+            "name": "Pay",
+            "request": {
+                "method": "POST",
+                "header": [
+                    {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                    }
+                ],
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\n    \"document\": \"1234567890\",\n    \"phone\": \"+1234567890\",\n    \"amount\": 50.25\n}"
+                },
+                "url": {
+                    "raw": "{{base_url}}/api/pay",
+                    "host": ["{{base_url}}"],
+                    "path": ["api", "pay"]
+                }
+            }
+        },
+        {
+            "name": "Confirm Payment",
+            "request": {
+                "method": "POST",
+                "header": [
+                    {
+                        "key": "Content-Type",
+                        "value": "application/json"
+                    }
+                ],
+                "body": {
+                    "mode": "raw",
+                    "raw": "{\n    \"idSession\": \"session12345\",\n    \"token\": \"abc123xyz456\"\n}"
+                },
+                "url": {
+                    "raw": "{{base_url}}/api/confirmPayment",
+                    "host": ["{{base_url}}"],
+                    "path": ["api", "confirmPayment"]
+                }
+            }
+        }
+    ],
+    "variable": [
+        {
+            "key": "base_url",
+            "value": "http://localhost:8000",
+            "type": "string"
+        }
+    ]
+}

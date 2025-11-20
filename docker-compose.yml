@@ -1,0 +1,93 @@
+services:
+  # SOAP Service (Laravel)
+  soap-app:
+    build:
+      context: './docker/8.4'
+      dockerfile: Dockerfile
+      args:
+        WWWGROUP: '${WWWGROUP:-1000}'
+    image: 'sail-8.4/app'
+    container_name: epayco_soap_app
+    extra_hosts:
+      - 'host.docker.internal:host-gateway'
+    ports:
+      - '8001:80'
+    environment:
+      WWWUSER: '${WWWUSER:-1000}'
+      LARAVEL_SAIL: 1
+      XDEBUG_MODE: '${SAIL_XDEBUG_MODE:-off}'
+      XDEBUG_CONFIG: '${SAIL_XDEBUG_CONFIG:-client_host=host.docker.internal}'
+      IGNITION_LOCAL_SITES_PATH: '${PWD}'
+      APP_URL: http://localhost:8001
+      DB_HOST: mysql
+      DB_DATABASE: '${DB_DATABASE:-epayco_soap}'
+      DB_USERNAME: '${DB_USERNAME:-epayco}'
+      DB_PASSWORD: '${DB_PASSWORD:-secret}'
+    volumes:
+      - './soap-service:/var/www/html'
+    networks:
+      - epayco-network
+    depends_on:
+      - mysql
+
+  # REST Service (Lumen)
+  rest-app:
+    build:
+      context: ./rest-service
+      dockerfile: Dockerfile
+    container_name: epayco_rest_app
+    volumes:
+      - ./rest-service/:/var/www
+    networks:
+      - epayco-network
+    environment:
+      - APP_ENV=local
+      - APP_URL=http://localhost:8002
+      - SOAP_URI=http://soap-app/api/soap/wallet
+      - SOAP_LOCATION=http://soap-app/api/soap/wallet
+
+  # Nginx para REST Service
+  rest-nginx:
+    image: nginx:latest
+    container_name: epayco_rest_nginx
+    ports:
+      - "8002:80"
+    volumes:
+      - ./rest-service/:/var/www
+      - ./rest-service/docker/nginx.conf:/etc/nginx/conf.d/default.conf
+    networks:
+      - epayco-network
+
+  # Base de datos MySQL
+  mysql:
+    image: 'mysql/mysql-server:8.0'
+    container_name: epayco_mysql
+    ports:
+      - '3306:3306'
+    environment:
+      MYSQL_ROOT_HOST: '%'
+      MYSQL_DATABASE: '${DB_DATABASE:-epayco_wallet}'
+      MYSQL_USER: '${DB_USERNAME:-epayco}'
+      MYSQL_PASSWORD: '${DB_PASSWORD:-epayco}'
+      MYSQL_ALLOW_EMPTY_PASSWORD: 1
+    volumes:
+      - 'epayco-mysql:/var/lib/mysql'
+      # - './soap-service/docker/database/mysql/create-testing-database.sh:/docker-entrypoint-initdb.d/10-create-testing-database.sh'
+    networks:
+      - epayco-network
+    healthcheck:
+      test:
+        - CMD
+        - mysqladmin
+        - ping
+        - '-p${DB_PASSWORD:-epayco}'
+      retries: 3
+      timeout: 5s
+
+networks:
+  epayco-network:
+    driver: bridge
+
+volumes:
+  epayco-mysql:
+    driver: local
