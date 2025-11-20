@@ -2,11 +2,11 @@
 
 ## Descargar el proyecto
 ```bash
-git clone https://github.com/grebo87/virtual-wallet-epayco.git
+git clone https://github.com/grebo87/epayco-wallet-tech-test.git
 ```
 
 ```bash
-cd virtual-wallet-epayco
+cd epayco-wallet-tech-test
 ```
 
 Este proyecto utiliza Docker Compose para orquestar tres servicios principales:
